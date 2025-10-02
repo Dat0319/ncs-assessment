@@ -1,0 +1,39 @@
+### Environment variables
+# @baseUrl = {{dev.baseUrl}}
+@baseUrl = http://localhost:8080/v1
+
+### POST register user
+POST {{baseUrl}}/auth/register
+Content-Type: application/json
+
+{
+  "email": "dattran0311@gmail.com",
+  "password": "123456",
+  "firstName": "Dat",
+  "lastName": "Tran"
+}
+
+### POST login user
+POST {{baseUrl}}/admin/auth/login
+Content-Type: application/json
+
+{
+  "email": "dattran0318@gmail.com",
+  "password": "123456"
+}
+
+### Get all users
+GET {{baseUrl}}/users
+Content-Type: application/json
+
+###
+
+### Create user
+POST {{baseUrl}}/users
+Content-Type: application/json
+
+{
+  "username": "john_doe",
+  "email": "john@example.com",
+  "password": "password123"
+}

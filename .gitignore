@@ -1,0 +1,9 @@
+node_modules
+dist
+newrelic_agent.log
+coverage
+logs
+
+# IDE folder
+# .vscode
+.idea

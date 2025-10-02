@@ -1,0 +1,30 @@
+{
+  "compilerOptions": {
+    /* Visit https://aka.ms/tsconfig.json to read more about this file */
+    /* Language and Environment */
+    "target": "ES6" /* Set the JavaScript language version for emitted JavaScript and include compatible library declarations. */,
+    "experimentalDecorators": true /* Enable experimental support for TC39 stage 2 draft decorators. */,
+    "emitDecoratorMetadata": true /* Emit design-type metadata for decorated declarations in source files. */,
+    /* Modules */
+    "module": "CommonJS" /* Specify what module code is generated. */,
+    "moduleResolution": "node" /* Specify how TypeScript looks up a file from a given module specifier. */,
+    "typeRoots": [
+      "src/libs/@types",
+      "node_modules/@types"
+    ] /* Specify multiple folders that act like `./node_modules/@types`. */,
+    "resolveJsonModule": true /* Enable importing .json files */,
+    /* JavaScript Support */
+    "allowJs": true /* Allow JavaScript files to be a part of your program. Use the `checkJS` option to get errors from these files. */,
+    "checkJs": true /* Enable error reporting in type-checked JavaScript files. */,
+    "outDir": "dist" /* Specify an output folder for all emitted files. */,
+    "removeComments": true /* Disable emitting comments. */,
+    "esModuleInterop": true /* Emit additional JavaScript to ease support for importing CommonJS modules. This enables `allowSyntheticDefaultImports` for type compatibility. */,
+    /* Type Checking */
+    "strict": false /* Enable all strict type-checking options. */,
+    "strictNullChecks": true /* When type checking, take into account `null` and `undefined`. */,
+    "alwaysStrict": true /* Ensure 'use strict' is always emitted. */,
+    "skipLibCheck": true // optional, skips type checking of declaration files
+  },
+  "include": ["src", "src/**/*.json"],
+  "exclude": ["node_modules", "src/**/*.spec.ts", "generators/templates/*.hbs"]
+}

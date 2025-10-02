@@ -1,0 +1,7 @@
+{
+  "name": "My Book API",
+  "version": "1.0.0",
+  "description": "API documentation for my book project",
+  "title": "My book API Docs",
+  "url": "http://localhost:8080"
+}

@@ -1,0 +1,7 @@
+{
+  "userNotFound": "Tài khoản không tồn tại",
+  "emailIsRequired": "emailIsRequired",
+  "passwordIsRequired": "passwordIsRequired",
+  "validateError": "validateError",
+  "Unauthorized": "Không có quyền"
+}

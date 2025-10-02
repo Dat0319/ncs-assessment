@@ -1,0 +1,14 @@
+FROM node:lts-alpine
+
+LABEL author="dattd3 (dattran0318@gmail.com)"
+
+WORKDIR /home/app
+
+COPY yarn.lock package.json ecosystem.config.js newrelic.js ./
+COPY ./doc ./doc
+
+RUN yarn config set strict-ssl false && yarn global add pm2 && yarn install --production && yarn cache clean
+
+COPY ./dist ./dist
+
+CMD ["pm2-runtime","start","ecosystem.config.js","--env","production"]

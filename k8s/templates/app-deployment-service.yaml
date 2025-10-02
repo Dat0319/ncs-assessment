@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: {{ .Values.appserver.name }}-deployment
+  namespace: {{ .Values.appserver.namespace }}
+  # labels:
+  #   environment: development # label with key is enviroment and value is testing
+
+spec:
+  replicas: {{ .Values.appserver.replicas  }}
+
+  selector:
+    matchLabels:
+      server: {{ .Values.appserver.name }}
+
+  template:
+    metadata:
+      labels:
+        server: {{ .Values.appserver.name }}
+    spec:
+      containers:
+        - name: {{ .Values.appserver.name }}
+          image: {{ .Values.appserver.image.name }}:{{ .Values.appserver.image.tag}}
+          imagePullPolicy: Never #Use docker local
+          ports:
+            - containerPort: {{ .Values.appserver.image.exposedPort }}
+          env:
+            - name: NODE_ENV
+              value: {{ .Values.appserver.env.NODE_ENV}}
+          # readinessProbe:
+          #   httpGet: 
+          #     port: {{ .Values.appserver.image.exposedPort }}
+          #     path: {{ .Values.appserver.image.healthCheck.ping }}
+          #   failureThreshold: {{ .Values.appserver.image.healthCheck.failureTimes }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.appserver.name}}-clusterip-service
+  namespace: {{ .Values.appserver.namespace }}
+  
+spec:
+  type: {{ .Values.appserver.service.type }}
+  ports:
+    - port: 80
+      targetPort: {{ .Values.appserver.image.exposedPort }}
+  selector:
+    server: {{ .Values.appserver.name}}

@@ -1,0 +1,164 @@
+services:
+  ncs-elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.17.6
+    container_name: ncs-elasticsearch
+    restart: always
+    environment:
+      - discovery.type=single-node
+      - bootstrap.memory_lock=true
+      - xpack.security.enabled=true
+      - xpack.security.authc.api_key.enabled=true
+      - ELASTIC_PASSWORD=changeme
+    volumes:
+      - elasticsearch-data:/usr/share/elasticsearch/data
+    ports:
+      - 9200:9200
+    networks:
+      - app-network
+
+  ncs-kibana:
+    container_name: ncs-kibana
+    image: docker.elastic.co/kibana/kibana:7.17.6
+    restart: always
+    environment:
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+      - ELASTICSEARCH_USERNAME=elastic
+      - ELASTICSEARCH_PASSWORD=changeme
+    ports:
+      - 5601:5601
+    depends_on:
+      - ncs-elasticsearch
+    networks:
+      - app-network
+
+  ncs-apm-server:
+    container_name: ncs-apm-server
+    image: docker.elastic.co/apm/apm-server:7.17.6
+    ports:
+      - 8200:8200
+    command: >
+      apm-server -e
+        -E output.elasticsearch.username=elastic
+        -E output.elasticsearch.password=changeme
+        -E output.elasticsearch.hosts=["elasticsearch:9200"]
+    cap_drop:
+      - ALL
+    cap_add:
+      - CHOWN
+      - DAC_OVERRIDE
+      - SETGID
+      - SETUID
+    depends_on:
+      - ncs-elasticsearch
+      - ncs-kibana
+    networks:
+      - app-network
+
+  ncs-backend:
+    build:
+      context: ./
+      dockerfile: .docker/local/Dockerfile-pro
+    image: ncs-backend:latest
+    container_name: ncs-backend
+    volumes:
+      - ./src:/app
+    ports:
+      - 8080:8080
+    environment:
+      - REDIS_HOST=db-ncs-redis
+      - REDIS_PORT=6379
+      - REDIS_PASSWORD=mM4bFqYObi4jRgZ5pRs2AFUluAG65jhN
+      - DB_HOST=db-ncs-mysql
+      - DB_PORT=5432
+      - DB_NAME=ncs
+      - DB_USER=postgres
+      - DB_PASSWORD=Book@123
+    command:
+      [
+        'pm2-runtime',
+        'start',
+        'ecosystem-production.config.js',
+        '--env',
+        'production',
+      ]
+    depends_on:
+      - db-ncs-redis
+      - db-ncs-mysql
+    networks:
+      - app-network
+
+  db-ncs-redis:
+    image: redis:latest
+    container_name: db-ncs-redis
+    ports:
+      - 6379:6379
+    volumes:
+      - redis_data:/data
+    restart: unless-stopped
+    environment:
+      - REDIS_PASSWORD=mM4bFqYObi4jRgZ5pRs2AFUluAG65jhN
+    command:
+      ['redis-server', '--requirepass', 'mM4bFqYObi4jRgZ5pRs2AFUluAG65jhN']
+    networks:
+      - app-network
+
+  # db-ncs-postgresql:
+  #   container_name: db-ncs-postgresql
+  #   image: postgres:14
+  #   restart: always
+  #   ports:
+  #     - 5432:5432
+  #   environment:
+  #     POSTGRES_PASSWORD: Book@123
+  #     POSTGRES_USER: postgres
+  #     POSTGRES_DB: ncs
+  #     PGDATA: /var/lib/postgresql/data/pgdata
+  #   command: >
+  #     postgres
+  #     -c max_connections=1000
+  #     -c shared_buffers=256MB
+  #     -c effective_cache_size=1GB
+  #     -c maintenance_work_mem=64MB
+  #     -c checkpoint_completion_target=0.9
+  #     -c wal_buffers=16MB
+  #     -c default_statistics_target=100
+  #   volumes:
+  #     - pgdata:/var/lib/postgresql/data
+  #   networks:
+  #     - app-network
+
+  db-ncs-mysql:
+    container_name: db-ncs-mysql
+    image: mysql:8.0
+    restart: always
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: Book@123
+      MYSQL_DATABASE: ncs
+      MYSQL_USER: ncs
+      MYSQL_PASSWORD: Book@123
+    command: >
+      --max_connections=1000
+      --character-set-server=utf8mb4
+      --collation-server=utf8mb4_unicode_ci
+      --default-authentication-plugin=mysql_native_password
+      --innodb_buffer_pool_size=256M
+      --innodb_log_file_size=64M
+      --max_allowed_packet=64M
+      --table_open_cache=4000
+      --sort_buffer_size=2M
+      --read_buffer_size=2M
+    volumes:
+      - mysqldata:/var/lib/mysql
+    networks:
+      - app-network
+
+volumes:
+  elasticsearch-data:
+  redis_data:
+  mysqldata:
+
+networks:
+  app-network:
+    driver: bridge

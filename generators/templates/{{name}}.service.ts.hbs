@@ -1,0 +1,72 @@
+/**
+ * {{pascalCase name}} Service
+ * @module {{pascalCase name}} Controller
+ * @description Config controller
+ */
+
+import { getCustomRepository } from 'typeorm';
+
+import { ErrorHandler, UnauthorizedError } from '../../libs/errors';
+import StatusCodes from '../../utils/status-code';
+import { {{pascalCase name}}Model } from './{{name}}.model';
+import { {{pascalCase name}}Repository } from './{{name}}.repository';
+
+export class {{pascalCase name}}Service {
+  private static instance: {{pascalCase name}}Service;
+  private {{camelCase name}}Repository: {{pascalCase name}}Repository;
+
+  constructor() {
+    if ({{pascalCase name}}Service.instance) {
+      return {{pascalCase name}}Service.instance;
+    }
+
+    this.{{camelCase name}}Repository = getCustomRepository({{pascalCase name}}Repository);
+    {{pascalCase name}}Service.instance = this;
+  }
+
+  /**
+   * @method create
+   * @description Create new {{name}}
+   */
+  async create() {
+    return;
+  }
+
+  /**
+   * @method list
+   * @description Get list
+   */
+  async list() {
+    return;
+  }
+
+  /**
+   * @async
+   * @method getById
+   * @description Get detail by id
+   * @param params {id}
+   */
+  async getById() {
+    return;
+  }
+
+  /**
+   * @async
+   * @method updateById
+   * @description Update by id
+   * @param params {id}
+   */
+  async updateById() {
+    return;
+  }
+
+  /**
+   * @async
+   * @method deleteById
+   * @description Delete by id
+   * @param params {id}
+   */
+  async deleteById() {
+    return;
+  }
+}
