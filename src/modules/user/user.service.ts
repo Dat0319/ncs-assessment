@@ -165,8 +165,13 @@ export class UserService {
     return { succeed: true };
   }
 
-  async teacherRegister(userEmail: string, params: TeacherRegisterParams) {
+  async teacherRegister(user: UserModel, params: TeacherRegisterParams) {
     const { teacher, students } = params;
+
+    if (user?.type != AppObject.USER_TYPE.TEACHER) {
+      throw new Error(`${user?.email} is not a teacher!`);
+    }
+
     const teacherFound = await this.getUserByConditions({
       conditions: { email: teacher },
     });
@@ -201,15 +206,15 @@ export class UserService {
           await this.userRegisterTeacherRepository.updateByConditions({
             conditions: { id: existedRegisted.id },
             overwriteConditions: { isDeleted: true },
-            data: { isDeleted: false, updatedBy: userEmail },
+            data: { isDeleted: false, updatedBy: user?.email },
           });
         }
       } else {
         await this.userRegisterTeacherRepository.createDoc({
           studentId: student.id,
           teacherId: teacherFound.id,
-          createdBy: userEmail,
-          updatedBy: userEmail,
+          createdBy: user?.email,
+          updatedBy: user?.email,
         });
       }
     }
@@ -217,7 +222,11 @@ export class UserService {
     return { succeed: true, status: 204 };
   }
 
-  async studentCommon(params: StudentCommonParams) {
+  async studentCommon(user: UserModel, params: StudentCommonParams) {
+    if (user?.type != AppObject.USER_TYPE.TEACHER) {
+      throw new Error(`${user?.email} is not a teacher!`);
+    }
+
     const paramsTeachers = Array.isArray(params.teachers)
       ? params.teachers
       : [params.teachers];
@@ -255,7 +264,11 @@ export class UserService {
       students: rows.map((r) => r.email),
     };
   }
-  async studentSuspend(params: StudentSuspendParams) {
+  async studentSuspend(user: UserModel, params: StudentSuspendParams) {
+    if (user?.type != AppObject.USER_TYPE.TEACHER) {
+      throw new Error(`${user?.email} is not a teacher!`);
+    }
+
     const userFound = await this.getUserByConditions({
       conditions: { email: params.email, type: AppObject.USER_TYPE.STUDENT },
     });

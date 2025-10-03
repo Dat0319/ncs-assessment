@@ -189,6 +189,7 @@ export class DataSeeder {
       'admin-ncs-assessment@gmail.com',
       'teacher1@gmail.com',
       'teacherken@gmail.com',
+      'student2@gmail.com',
     ];
 
     // Fetch users by email

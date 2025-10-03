@@ -17,70 +17,16 @@ export default class AuthController {
 
   private _initializeRoutes() {
     //#region Admin section
-    /**
-     * @api {post} /admin/auth/login Admin Login
-     * @apiName AdminLogin
-     * @apiGroup Admin Authentication
-     *
-     * @apiParam (Body) {String} email Admin email address
-     * @apiParam (Body) {String} password Admin password
-     *
-     * @apiSuccess {String} token JWT access token
-     * @apiSuccess {String} refreshToken Refresh token
-     * @apiSuccess {Object} user Admin user details
-     *
-     * @apiSuccessExample {json} Success-Response:
-     *     HTTP/1.1 200 OK
-     *     {
-     *       "token": "jwt.token.here",
-     *       "refreshToken": "refresh.token.here",
-     *       "user": {
-     *         "id": "uuid",
-     *         "email": "admin@example.com",
-     *         "role": "ADMIN"
-     *       }
-     *     }
-     */
     // this.router.post(`${this.adminPath}/login`, [
     //   validate(AuthValidation.adminLogin),
     //   this.adminLogin.bind(this),
     // ]);
 
-    /**
-     * @api {post} /admin/auth/logout Admin Logout
-     * @apiName AdminLogout
-     * @apiGroup Admin Authentication
-     *
-     * @apiHeader {String} Authorization Bearer token
-     *
-     * @apiSuccess {Boolean} success Logout status
-     *
-     * @apiSuccessExample {json} Success-Response:
-     *     HTTP/1.1 200 OK
-     *     {
-     *       "success": true
-     *     }
-     */
     // this.router.post(`${this.adminPath}/logout`, [this.logout.bind(this)], {
     //   roles: Object.values(AppObject.ADMIN_ROLES),
     // });
 
     //#region User section
-    /**
-     * @api {get} /auth/login/socials/:social Social Login
-     * @apiName SocialLogin
-     * @apiGroup User Authentication
-     *
-     * @apiParam {String} social Social provider (e.g., "google", "facebook")
-     *
-     * @apiSuccess {String} redirectUrl Social login URL
-     *
-     * @apiSuccessExample {json} Success-Response:
-     *     HTTP/1.1 200 OK
-     *     {
-     *       "redirectUrl": "https://social-auth-url"
-     *     }
-     */
     // this.router.get(`${this.userPath}/login/socials/:social`, [
     //   this.socialLink.bind(this),
     // ]);

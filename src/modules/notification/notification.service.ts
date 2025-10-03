@@ -7,6 +7,7 @@
 import { getCustomRepository } from 'typeorm';
 
 import { AppObject } from '../../common/consts';
+import { UserModel } from '../user/user.interface';
 import { UserRepository } from '../user/user.repository';
 import { NotificationRecipientParams } from './notification.model';
 import { NotificationRepository } from './notification.repository';
@@ -84,8 +85,12 @@ export class NotificationService {
    * @description Get recipients for notification
    * @param body { teacher: string; notification: string }
    */
-  async recipients(userEmail: string, body: NotificationRecipientParams) {
+  async recipients(user: UserModel, body: NotificationRecipientParams) {
     const { teacher, notification } = body;
+
+    if (user?.type != AppObject.USER_TYPE.TEACHER) {
+      throw new Error(`${user?.email} is not a teacher!`);
+    }
 
     const teacherUser = await this.userRepository.findOne({
       where: {
@@ -119,8 +124,8 @@ export class NotificationService {
       title: 'Notification sent to students of ' + teacher,
       content: notification,
       emails: recipients.join(', '),
-      createdBy: userEmail,
-      updatedBy: userEmail,
+      createdBy: user?.email,
+      updatedBy: user?.email,
     });
 
     return { recipients };

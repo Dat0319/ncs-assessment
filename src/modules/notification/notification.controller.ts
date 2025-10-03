@@ -90,7 +90,8 @@ export default class NotificationController {
    */
   async recipients(req: Request, res: Response) {
     return res.handler(
-      this.notificationService.recipients(req?.user?.email, req.body)
+      // @ts-ignore
+      this.notificationService.recipients(req?.user, req.body)
     );
   }
 }

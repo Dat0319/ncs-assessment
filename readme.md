@@ -4,6 +4,44 @@
 
 ![Architect](doc/architect_ncs-assessment.png 'Architect')
 
+## Summary note
+
+I use node 22.17.1, pnpm to install libs. docker compose to create database mysql, redis to cache.
+
+Database to test auto create in data-seeder.ts
+
+Host url: https://api.johnremotedev.com/api-docs
+
+Postman collection: ./doc/postman.json
+  - when call api in postman
+  - The first call Api "0. user login" to get accessToken and auto save to environment of collection
+  - the second you can check other api
+  - finnally you can change enviroment and auth of collection setting.
+
+Unit test: In this case i use unit test for "services layer" in "modules"(foulder tests base for end to end not use)
+
+Security and permission: i check in auth.middleware and permission.middleware for check role permission of user and permission of user with api route.
+
+### Run project
+Run docker compose to create mysql + redis + ... container
+
+```shell
+# setup environments
+docker-compose up -d
+
+# start in local
+yarn start
+
+# run uni test
+yarn test
+
+```
+
+```shell
+# stop services
+docker-compose down -v
+```
+
 ## Features
 
 - Error handling
@@ -11,7 +49,7 @@
 - Translate
 - Logger: winston/morgan
 - Dockerfile
-- API docs
+- API docs: localhost:8080/api-docs
 - Api flow: route -> controller -> service -> repository -> schema
 
 # Structure
@@ -38,8 +76,6 @@ Node boilerplate is a standard project template based on NodeJS language, used i
   - _Containerize_: dockerrize support
   - _Orchestration_: **K8S**
   - _CI/CD_: Bitbucket pipeline, GitlabCI & CircleCI example
-
-I use node 22.17.1, pnpm to install libs. docker compose to create database,cache.
 
 ### b. _Structure base_
 
@@ -101,7 +137,7 @@ I use node 22.17.1, pnpm to install libs. docker compose to create database,cach
 │   │   └───user
 │   │       └───entities
 │   └───utils
-└───tests
+└───tests // for end to end testing
 ```
 
 ### c. _Dependency_
@@ -232,15 +268,6 @@ I use node 22.17.1, pnpm to install libs. docker compose to create database,cach
 ## 2. How to running
 
 ### a. **How to running & build**
-
-Run docker compose to create mysql + redis + ... container
-
-```shell
-docker-compose up -d
-
-# stop services
-docker-compose down -v
-```
 
 You can launch applications with many different environment modes like:
 
