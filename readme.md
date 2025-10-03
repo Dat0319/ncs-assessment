@@ -10,9 +10,9 @@ I use node 22.17.1, pnpm to install libs. docker compose to create database mysq
 
 Database to test auto create in data-seeder.ts
 
-Host url: https://api.johnremotedev.com/api-docs
+Host url: https://api.johnremotedev.com/api-docs (use postman instead swagger)
 
-Postman collection: ./doc/postman.json
+Postman collection v2.1: ./doc/ncs_assessment.postman_collection.json
 
 - when call api in postman
 - The first call Api "0. user login" to get accessToken and auto save to environment of collection

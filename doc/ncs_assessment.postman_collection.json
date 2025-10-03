@@ -1,0 +1,245 @@
+{
+	"info": {
+		"_postman_id": "96f2452d-e8e2-4cd7-8065-f69bc4bd344c",
+		"name": "Teacher-Student API",
+		"description": "Collection for Teacher-Student Management APIs",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "25714958"
+	},
+	"item": [
+		{
+			"name": "0. user login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Parse the response JSON",
+							"const response = pm.response.json();",
+							"",
+							"// Assuming the token is returned as response.accessToken or response.token",
+							"const token = response.accessToken || response.token;",
+							"",
+							"if (token) {",
+							"  // Set the token as a collection variable",
+							"  pm.collectionVariables.set(\"accessToken\", token);",
+							"  console.log(\"Access token set successfully:\", token);",
+							"} else {",
+							"  console.warn(\"Access token not found in response.\");",
+							"}",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"grantType\": \"password\",\n    // \"email\": \"student2@gmail.com\",\n    \"email\": \"teacher1@gmail.com\",\n    \"password\": \"123456\"\n    // \"username\": \"\",\n    // \"code\": \"+84\",\n    // \"mobilePhone\": \"986483371\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/v1/auth/login",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"v1",
+						"auth",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "1. Register Student to Teacher",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n//   \"teacher\": \"teacherken@gmail.com\",\n//   \"students\":\n//     [\n//       \"studentjon@gmail.com\",\n//       \"studenthon@gmail.com\"\n//     ]\n  \"teacher\": \"teacher2@gmail.com\",\n  \"students\":\n    [\n      \"student2@gmail.com\",\n      \"student3@gmail.com\"\n    ]\n}"
+				},
+				"url": {
+					"raw": "{{baseUrl}}/v1/teachers/register/students",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"v1",
+						"teachers",
+						"register",
+						"students"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "2. Get Common Students",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/v1/students/common?teachers=teacher1@gmail.com",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"v1",
+						"students",
+						"common"
+					],
+					"query": [
+						{
+							"key": "teachers",
+							"value": "teacher1@gmail.com"
+						},
+						{
+							"key": "teachers",
+							"value": "teacher2@gmail.com",
+							"disabled": true
+						},
+						{
+							"key": "teachers",
+							"value": "teacher3@gmail.com",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "3. Suspend Student",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\": \"student1@gmail.com\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/v1/students/suspend",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"v1",
+						"students",
+						"suspend"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "4. Get Notification Recipients",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"teacher\": \"teacher2@gmail.com\",\n  \"notification\": \"Hello students! @student5@gmail.com\"\n}"
+				},
+				"url": {
+					"raw": "{{baseUrl}}/v1/notifications/recipients",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"v1",
+						"notifications",
+						"recipients"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{accessToken}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:8080"
+		},
+		{
+			"key": "teacherEmail",
+			"value": "teacher1@gmail.com"
+		},
+		{
+			"key": "studentEmail",
+			"value": "student1@gmail.com"
+		},
+		{
+			"key": "accessToken",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "proUrl",
+			"value": "https://api.johnremotedev.com/",
+			"type": "string"
+		}
+	]
+}
