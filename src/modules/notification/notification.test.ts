@@ -1,6 +1,7 @@
 import { getCustomRepository } from 'typeorm';
 import { AppObject } from '../../common/consts';
 import RedisConfig from '../../configs/databases/redis.config';
+import { UserModel } from '../user/user.interface';
 import { UserRepository } from '../user/user.repository';
 import { NotificationRepository } from './notification.repository';
 import { NotificationService } from './notification.service';
@@ -61,10 +62,17 @@ describe('NotificationService', () => {
 
     userRepository.findOne = jest.fn().mockResolvedValue(teacher);
 
-    const result = await notificationService.recipients('admin@example.com', {
-      teacher: teacher.email,
-      notification: 'Hello @student3@example.com and @student1@example.com',
-    });
+    const result = await notificationService.recipients(
+      {
+        email: 'admin@example.com',
+        type: AppObject.USER_TYPE.TEACHER,
+        isDeleted: false,
+      } as UserModel,
+      {
+        teacher: teacher.email,
+        notification: 'Hello @student3@example.com and @student1@example.com',
+      }
+    );
 
     expect(result.recipients).toEqual(
       expect.arrayContaining(['student1@example.com', 'student3@example.com'])
@@ -83,10 +91,17 @@ describe('NotificationService', () => {
     userRepository.findOne = jest.fn().mockResolvedValue(null);
 
     await expect(
-      notificationService.recipients('admin@example.com', {
-        teacher: 'missing@example.com',
-        notification: 'Hello @student@example.com',
-      })
+      notificationService.recipients(
+        {
+          email: 'admin@example.com',
+          type: AppObject.USER_TYPE.TEACHER,
+          isDeleted: false,
+        } as UserModel,
+        {
+          teacher: 'missing@example.com',
+          notification: 'Hello @student@example.com',
+        }
+      )
     ).rejects.toThrow('Teacher with email missing@example.com not found');
   });
 });

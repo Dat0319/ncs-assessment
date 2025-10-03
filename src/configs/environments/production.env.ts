@@ -74,7 +74,7 @@ export const ENV: AppEnvironment = {
       USERNAME: 'ncs',
       PASSWORD: 'Book@123',
       HOST: 'db-ncs-mysql',
-      PORT: 5432,
+      PORT: 3306,
       NAME: 'ncs',
       // USERNAME: 'postgres',
       // PASSWORD: 'postgres@123',

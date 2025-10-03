@@ -75,8 +75,8 @@ jobs:
             echo "Container status:"
             docker compose ps
 
-            # Show logs for book-backend
-            echo "Book-backend logs:"
-            docker logs book-backend --tail 50
+            # Show logs for ncs-backend
+            echo "ncs-backend logs:"
+            docker logs ncs-backend --tail 50
 
           EOF

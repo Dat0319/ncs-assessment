@@ -13,16 +13,18 @@ Database to test auto create in data-seeder.ts
 Host url: https://api.johnremotedev.com/api-docs
 
 Postman collection: ./doc/postman.json
-  - when call api in postman
-  - The first call Api "0. user login" to get accessToken and auto save to environment of collection
-  - the second you can check other api
-  - finnally you can change enviroment and auth of collection setting.
+
+- when call api in postman
+- The first call Api "0. user login" to get accessToken and auto save to environment of collection
+- the second you can check other api
+- finnally you can change enviroment and auth of collection setting.
 
 Unit test: In this case i use unit test for "services layer" in "modules"(foulder tests base for end to end not use)
 
 Security and permission: i check in auth.middleware and permission.middleware for check role permission of user and permission of user with api route.
 
 ### Run project
+
 Run docker compose to create mysql + redis + ... container
 
 ```shell
@@ -40,6 +42,10 @@ yarn test
 ```shell
 # stop services
 docker-compose down -v
+
+# update global libs if you have error
+# yarn global add gulp-cli
+# yarn global add apidoc-swagger
 ```
 
 ## Features

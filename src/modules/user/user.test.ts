@@ -94,10 +94,17 @@ describe('UserService', () => {
     userRegisterTeacherRepository.findOne.mockResolvedValue(undefined);
     userRegisterTeacherRepository.createDoc = jest.fn().mockResolvedValue({});
 
-    const result = await userService.teacherRegister('admin@example.com', {
-      teacher: teacher.email,
-      students: [student.email],
-    });
+    const result = await userService.teacherRegister(
+      {
+        email: 'admin@example.com',
+        type: AppObject.USER_TYPE.TEACHER,
+        isDeleted: false,
+      } as UserModel,
+      {
+        teacher: teacher.email,
+        students: [student.email],
+      }
+    );
 
     expect(result).toEqual({ succeed: true, status: 204 });
     expect(userRegisterTeacherRepository.createDoc).toHaveBeenCalledTimes(1);
@@ -115,10 +122,17 @@ describe('UserService', () => {
       .mockResolvedValueOnce(notTeacher);
 
     await expect(
-      userService.teacherRegister('admin@example.com', {
-        teacher: notTeacher.email,
-        students: [],
-      })
+      userService.teacherRegister(
+        {
+          email: 'admin@example.com',
+          type: AppObject.USER_TYPE.TEACHER,
+          isDeleted: false,
+        } as UserModel,
+        {
+          teacher: notTeacher.email,
+          students: [],
+        }
+      )
     ).rejects.toThrow('userNotTeacher');
   });
 
@@ -141,10 +155,17 @@ describe('UserService', () => {
       .mockResolvedValueOnce(notStudent);
 
     await expect(
-      userService.teacherRegister('admin@example.com', {
-        teacher: teacher.email,
-        students: [notStudent.email],
-      })
+      userService.teacherRegister(
+        {
+          email: 'admin@example.com',
+          type: AppObject.USER_TYPE.TEACHER,
+          isDeleted: false,
+        } as UserModel,
+        {
+          teacher: teacher.email,
+          students: [notStudent.email],
+        }
+      )
     ).rejects.toThrow('userNotStudent');
   });
 
@@ -180,10 +201,17 @@ describe('UserService', () => {
       .fn()
       .mockResolvedValue({});
 
-    const result = await userService.teacherRegister('admin@example.com', {
-      teacher: teacher.email,
-      students: [student.email],
-    });
+    const result = await userService.teacherRegister(
+      {
+        email: 'admin@example.com',
+        type: AppObject.USER_TYPE.TEACHER,
+        isDeleted: false,
+      } as UserModel,
+      {
+        teacher: teacher.email,
+        students: [student.email],
+      }
+    );
 
     expect(result).toEqual({ succeed: true, status: 204 });
     expect(
@@ -220,9 +248,16 @@ describe('UserService', () => {
       get: () => mockManager,
     });
 
-    const result = await userService.studentCommon({
-      teachers: teachers.map((t) => t.email),
-    });
+    const result = await userService.studentCommon(
+      {
+        email: 'admin@example.com',
+        type: AppObject.USER_TYPE.TEACHER,
+        isDeleted: false,
+      } as UserModel,
+      {
+        teachers: teachers.map((t) => t.email),
+      }
+    );
 
     expect(result).toEqual({ students: ['student@example.com'] });
   });
@@ -236,7 +271,14 @@ describe('UserService', () => {
       .mockResolvedValue([{ id: 't1', email: 'teacher1@example.com' }]);
 
     await expect(
-      userService.studentCommon({ teachers: inputEmails })
+      userService.studentCommon(
+        {
+          email: 'admin@example.com',
+          type: AppObject.USER_TYPE.TEACHER,
+          isDeleted: false,
+        } as UserModel,
+        { teachers: inputEmails }
+      )
     ).rejects.toThrow('emailTeacherNotFound');
   });
 
@@ -265,9 +307,16 @@ describe('UserService', () => {
       }),
     });
 
-    const result = await userService.studentCommon({
-      teachers: teachers.map((t) => t.email),
-    });
+    const result = await userService.studentCommon(
+      {
+        email: 'admin@example.com',
+        type: AppObject.USER_TYPE.TEACHER,
+        isDeleted: false,
+      } as UserModel,
+      {
+        teachers: teachers.map((t) => t.email),
+      }
+    );
 
     expect(result).toEqual({ students: [] });
   });
@@ -285,7 +334,14 @@ describe('UserService', () => {
     // userRepository.updateByConditions.mockResolvedValue({});
     userRepository.updateByConditions = jest.fn().mockResolvedValue({});
 
-    const result = await userService.studentSuspend({ email: student.email });
+    const result = await userService.studentSuspend(
+      {
+        email: 'admin@example.com',
+        type: AppObject.USER_TYPE.TEACHER,
+        isDeleted: false,
+      } as UserModel,
+      { email: student.email }
+    );
 
     expect(result).toEqual({ succeed: true, status: 204 });
     expect(userRepository.updateByConditions).toHaveBeenCalledWith({
@@ -298,7 +354,14 @@ describe('UserService', () => {
     userService['getUserByConditions'] = jest.fn().mockResolvedValue(null);
 
     await expect(
-      userService.studentSuspend({ email: 'missing@student.com' })
+      userService.studentSuspend(
+        {
+          email: 'admin@example.com',
+          type: AppObject.USER_TYPE.TEACHER,
+          isDeleted: false,
+        } as UserModel,
+        { email: 'missing@student.com' }
+      )
     ).rejects.toThrow('userNotStudent');
   });
 
@@ -312,7 +375,14 @@ describe('UserService', () => {
     userService['getUserByConditions'] = jest.fn().mockResolvedValue(student);
 
     await expect(
-      userService.studentSuspend({ email: 'student@example.com' })
+      userService.studentSuspend(
+        {
+          email: 'admin@example.com',
+          type: AppObject.USER_TYPE.TEACHER,
+          isDeleted: false,
+        } as UserModel,
+        { email: 'student@example.com' }
+      )
     ).rejects.toThrow('accountAlreadySuspended');
   });
 });
