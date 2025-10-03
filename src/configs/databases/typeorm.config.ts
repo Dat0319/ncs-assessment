@@ -14,7 +14,7 @@ const databaseConfig: ConnectionOptions = {
       process.env.NODE_ENV === 'local' ? 'src' : 'dist'
     }/modules/**/*.entity.{js,ts}`,
   ],
-  // synchronize: true,
+  synchronize: true,
   // migrations: [path.join(__dirname, '../../migrations/*.{js,ts}')],
   // migrationsRun: true,
   // logging: true,
